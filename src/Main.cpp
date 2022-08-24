@@ -113,7 +113,6 @@ std::vector<std::string> readLabels(std::string& labelFilepath)
     return labels;
 }
 
-// Main() function: where the execution of program begins
 int main(int argc, char* argv[])
 {
     const int64_t batchSize = 2;
@@ -223,19 +222,15 @@ int main(int argc, char* argv[])
 
     cv::Mat channels[3];
     cv::split(resizedImage, channels);
-    // Normalization per channel
-    // Normalization parameters obtained from
-    // https://github.com/onnx/models/tree/master/vision/classification/squeezenet
+
     channels[0] = (channels[0] - 0.485) / 0.229;
     channels[1] = (channels[1] - 0.456) / 0.224;
     channels[2] = (channels[2] - 0.406) / 0.225;
     cv::merge(channels, 3, resizedImage);
-    // HWC to CHW
     cv::dnn::blobFromImage(resizedImage, preprocessedImage);
 
     size_t inputTensorSize = vectorProduct(inputDims);
     std::vector<float> inputTensorValues(inputTensorSize);
-    // Make copies of the same image input.
     for (int64_t i = 0; i < batchSize; ++i)
     {
         std::copy(preprocessedImage.begin<float>(),
@@ -292,14 +287,11 @@ int main(int argc, char* argv[])
         assert(("Output predictions should all be identical.",
                 predIds.at(b) == predIds.at(0)));
     }
-    // All the predictions should be the same
-    // because the input images are just copies of each other.
 
     std::cout << "Predicted Label ID: " << predIds.at(0) << std::endl;
     std::cout << "Predicted Label: " << predLabels.at(0) << std::endl;
     std::cout << "Uncalibrated Confidence: " << confidences.at(0) << std::endl;
 
-    // Measure latency
     int numTests{100};
     std::chrono::steady_clock::time_point begin =
             std::chrono::steady_clock::now();

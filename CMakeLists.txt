@@ -54,7 +54,7 @@ else ()
     add_definitions(-DIMSAVE=0)
 endif ()
 
-add_executable(parking_cpu src/Main.cpp)
+add_executable(parking_cpu src/RunnerDetector.cpp)
 target_include_directories(parking_cpu PRIVATE ${ONNX_RUNTIME_SESSION_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(parking_cpu ${ONNX_RUNTIME_LIB} ${OpenCV_LIBS} ${ZMQ_LIBRARIES} ${GST_LIBRARIES} ${GST_APP_LIBRARIES} ${GST_RTP_LIBRARIES}
         nlohmann_json::nlohmann_json ${CURL_LIBRARIES} /usr/local/lib/libcpr.so)
